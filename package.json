@@ -3,6 +3,10 @@
   "displayName": "Task Custom Variable",
   "description": "A VS Code extension that enables custom variable support in tasks.json",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apolloadam31415926/custom-variable"
+  },
   "engines": {
     "vscode": "^1.100.0"
   },
