@@ -15,6 +15,7 @@ none
 This extension contributes the following settings:
 
 * `task-custom-variable.reloadCustomVariable`: Reload Task Custom Variable.
+* `task-custom-variable.queryCustomVariable`: Query Task Custom Variable.
 
 ## Known Issues
 
