@@ -11,6 +11,12 @@ const workspaceFolders = vscode.workspace.workspaceFolders;
 const rootPath = workspaceFolders ? workspaceFolders[0].uri.fsPath : '';
 const configPath = path.join(rootPath, relative_path);
 
+function workspaceFolderstoString(): string {
+  const workspaceFolders = vscode.workspace.workspaceFolders;
+  const workspacePaths = workspaceFolders ? workspaceFolders.map(folder => folder.uri.fsPath) : [];
+  return workspacePaths.map(item => String(item)).join(',');;
+}
+
 /**
  * 读取配置文件并缓存到工作区状态
  * @param context 扩展上下文
@@ -38,6 +44,7 @@ async function loadAndCacheConfig(context: vscode.ExtensionContext): Promise<voi
 }
 
 export function activate(context: vscode.ExtensionContext) {
+    console.log("debug");
     // --- 1. 在扩展激活时（VS Code启动/窗口重载）立即加载配置 ---
     loadAndCacheConfig(context);
 
@@ -52,7 +59,19 @@ export function activate(context: vscode.ExtensionContext) {
     let disposableGetCachedVar = vscode.commands.registerCommand('task-custom-variable.queryCustomVariable', async (varName: string) => {
         const cachedConfig = context.workspaceState.get<any>(CONFIG_KEY);
         if (cachedConfig && cachedConfig[varName] !== undefined) {
-            return String(cachedConfig[varName]); // 确保返回字符串
+            const value=cachedConfig[varName];
+
+            if (Array.isArray(value)) {
+                // 如果是数组，确保数组中的每个元素都是字符串
+                return value.map(item => String(item));
+            } else {
+                if (varName === "workspaceFolders") {
+                  return workspaceFolderstoString();
+                }
+                // 如果是其他类型，统一返回字符串
+                return String(value);
+            }
+            //return String(cachedConfig[varName]); // 确保返回字符串
         }
         // 如果未找到，可以返回空字符串或抛出错误，取决于你的需求
         vscode.window.showWarningMessage(`Variable "${varName}" not found in cached configuration.`);
