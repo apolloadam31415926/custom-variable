@@ -44,7 +44,11 @@ async function loadAndCacheConfig(context: vscode.ExtensionContext): Promise<voi
 }
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log("debug");
+    console.log("debug_v2");
+    const outputChannel = vscode.window.createOutputChannel("My Extension");
+    outputChannel.appendLine("Hello, VS Code!");
+    outputChannel.show();
+
     // --- 1. 在扩展激活时（VS Code启动/窗口重载）立即加载配置 ---
     loadAndCacheConfig(context);
 
@@ -63,7 +67,8 @@ export function activate(context: vscode.ExtensionContext) {
 
             if (Array.isArray(value)) {
                 // 如果是数组，确保数组中的每个元素都是字符串
-                return value.map(item => String(item));
+                //return value.map(item => String(item));
+                return value.join(",");
             } else {
                 if (varName === "workspaceFolders") {
                   return workspaceFolderstoString();
